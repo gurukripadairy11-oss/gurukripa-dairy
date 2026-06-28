@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B2B Sourcing Portal & ROI Forecast | Guru Kripa Dairy</title>
+  <meta name="description" content="Access Guru Kripa Dairy B2B portal. Calculate multi-product sourcing cost benefits, evaluate wastage reduction indices, and export consolidated PDF reports.">
+  
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER & NAVIGATION -->
+  <header class="header" id="header">
+    <div class="container">
+      <a href="index.html" class="logo" aria-label="Guru Kripa Dairy Home">
+        <img src="images/logo.webp" alt="Guru Kripa Dairy Logo" class="logo-img">
+        <span class="logo-text">Guru Kripa <span>Dairy</span></span>
+      </a>
+      
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="shop.html">Shop Catalog</a></li>
+          <li><a href="dashboard.html" class="active">B2B Portal</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </nav>
+      
+      <div class="nav-actions">
+        <button class="cart-toggle" id="cart-toggle-btn" aria-label="View shopping cart">
+          <svg class="cart-icon-svg" viewBox="0 0 24 24">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span class="cart-badge" id="cart-badge" style="display: none;">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- B2B DASHBOARD PORTAL MAIN -->
+  <main class="products-section dashboard-layout">
+    <div class="products-bg-glow products-glow-1"></div>
+    <div class="products-bg-glow products-glow-2"></div>
+    
+    <div class="container">
+      <div class="section-header-wrapper" style="margin-bottom: 40px;">
+        <h1 class="section-title">B2B Sourcing Dashboard</h1>
+        <p class="section-subtitle">A consolidated commercial interface for restaurants, sweet shops, and cafes. Forecast multi-product operational efficiency and export certified PDF reports.</p>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Left Column: Products calculation table -->
+        <div class="dashboard-card">
+          <h2 style="font-size:1.3rem; font-weight:800; color:#ffffff; margin-bottom:20px; border-bottom:1px solid var(--color-border); padding-bottom:12px;">
+            Sourcing Inventory Planner
+          </h2>
+          
+          <div class="calc-group" style="margin-bottom: 30px;">
+            <label class="calc-label" for="db-business-type">Commercial Sourcing Model</label>
+            <select id="db-business-type" class="calc-input" style="max-width: 360px;">
+              <option value="restaurant" selected>Cafe & Luxury Dine-in (High Portion Premiums)</option>
+              <option value="bakery">Sweet Shop & Confectionery (High Fat Demand)</option>
+              <option value="household">Fitness Club / Residential Sourcing (Wellness Surcharge)</option>
+            </select>
+          </div>
+
+          <div style="margin-top: 20px;">
+            <!-- Table Headers -->
+            <div class="calc-table-row calc-table-header">
+              <div>Dairy Sourcing Product</div>
+              <div>Est. Sourcing Vol/Month</div>
+              <div>Current Wastage</div>
+              <div>Net Monthly Savings</div>
+            </div>
+            
+            <!-- Table body items injected dynamically -->
+            <div id="dashboard-calc-tbody">
+              <!-- Injected by app.js -->
+            </div>
+          </div>
+          
+          <div style="margin-top: 32px; display: flex; gap: 16px;">
+            <button class="btn btn-secondary" id="db-generate-report-btn" style="border-radius: var(--radius-sm);">
+              <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.5;">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+              </svg>
+              <span>Export Consolidated PDF Report</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Column: Consolidated metrics summary & Chart -->
+        <div>
+          <!-- Consolidated Dashboard Metrics -->
+          <div class="dashboard-card" style="padding: 24px;">
+            <h3 style="font-size:1.1rem; font-weight:800; color:#ffffff; margin-bottom:20px; border-bottom:1px solid var(--color-border); padding-bottom:10px;">
+              Projected ROI Analytics
+            </h3>
+            
+            <div class="roi-metrics-row" style="margin-bottom: 24px;">
+              <div class="roi-metric-card" style="padding: 12px 14px;">
+                <span class="metric-title" style="font-size: 0.65rem;">Total Sourcing Investment</span>
+                <span class="metric-value" id="db-metric-investment" style="font-size:1.25rem;">₹0</span>
+              </div>
+              <div class="roi-metric-card highlight-cyan" style="padding: 12px 14px;">
+                <span class="metric-title" style="font-size: 0.65rem;">Total Monthly Savings</span>
+                <span class="metric-value" id="db-metric-savings" style="font-size:1.25rem;">₹0</span>
+              </div>
+              <div class="roi-metric-card highlight-gold" style="padding: 12px 14px;">
+                <span class="metric-title" style="font-size: 0.65rem;">Consolidated 3-Yr ROI</span>
+                <span class="metric-value" id="db-metric-roi" style="font-size:1.25rem;">0%</span>
+              </div>
+            </div>
+            
+            <h4 style="font-size:0.8rem; font-weight:700; color:var(--color-text-muted); text-transform:uppercase; margin-bottom:12px; letter-spacing:0.5px;">
+              Cumulative 3-Year Sourcing Curves
+            </h4>
+            <div class="roi-chart-container" style="height: 250px;">
+              <canvas id="dbConsolidatedChart"></canvas>
+            </div>
+            
+            <div style="background: rgba(201, 155, 50, 0.05); border:1px dashed rgba(201, 155, 50, 0.3); border-radius:12px; padding:16px; margin-top:20px;">
+              <p style="font-size:0.82rem; color:var(--color-text-muted); line-height:1.5;">
+                <strong style="color:var(--color-secondary);">* Sourcing Efficiency</strong>: Switch to pure dairy products prevents kitchen curd/shrinkage wastage by up to 20%. Net saving forecasts are estimated using local market coefficients.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- CART DRAWER -->
+  <div class="cart-overlay" id="cart-overlay"></div>
+  <section class="cart-drawer" id="cart-drawer" aria-labelledby="cart-drawer-title">
+    <div class="cart-header">
+      <h3 class="cart-title" id="cart-drawer-title">Your Cart</h3>
+      <button class="btn-close-cart" id="close-cart-btn" aria-label="Close cart drawer">
+        <svg class="close-icon-svg" viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="cart-body" id="cart-items-container">
+      <!-- Dynamic Cart Items will be rendered here -->
+    </div>
+    
+    <div class="cart-footer">
+      <div class="cart-summary-row">
+        <span>Subtotal</span>
+        <span id="cart-subtotal">₹0.00</span>
+      </div>
+      <div class="cart-summary-row">
+        <span>Delivery Charges</span>
+        <span id="cart-delivery">₹0.00</span>
+      </div>
+      <div class="cart-summary-row total">
+        <span>Total Amount</span>
+        <span id="cart-total">₹0.00</span>
+      </div>
+      <a href="cart.html" class="btn btn-primary btn-checkout" style="text-align: center; text-decoration: none;">View Cart & Checkout</a>
+    </div>
+  </section>
+
+  <!-- PRINTABLE REPORT OVERLAY -->
+  <div class="print-report-container" id="print-report-container" style="display: none;">
+    <div class="print-report-header">
+      <div class="print-logo">
+        <span class="logo-text">Guru Kripa <span>Dairy</span></span>
+        <span class="report-tag">Commercial Analysis Report</span>
+      </div>
+      <div class="print-date" id="print-report-date">Date: 2026-06-28</div>
+    </div>
+    <div class="print-report-body">
+      <h2 class="print-title">B2B Commercial Sourcing Optimization & ROI Analysis</h2>
+      <p class="print-intro">This document outlines the projected financial and operational return on investment (ROI) achieved by integrating Guru Kripa Dairy's premium farm-fresh products into your commercial operations, sweet shops, or restaurants.</p>
+      
+      <div class="print-section">
+        <h3>1. Product Sourcing Inventory Specifications</h3>
+        <div id="print-specs-container">
+          <!-- Dynamic specs injected here -->
+        </div>
+      </div>
+
+      <div class="print-section">
+        <h3>2. Financial Projections & Consolidated Inputs</h3>
+        <table class="print-table">
+          <thead>
+            <tr>
+              <th>Metric Variables</th>
+              <th>Calculated Values</th>
+              <th>Operational Impact Description</th>
+            </tr>
+          </thead>
+          <tbody id="print-metrics-tbody">
+            <!-- Dynamic inputs injected here -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="print-section">
+        <h3>3. Projected Consolidated 3-Year Sourcing Benefits</h3>
+        <table class="print-table">
+          <thead>
+            <tr>
+              <th>Year Period</th>
+              <th>Monthly Surcharge Cost</th>
+              <th>Wastage Savings (₹)</th>
+              <th>Revenue Gain from Quality (₹)</th>
+              <th>Net Financial Savings (₹)</th>
+            </tr>
+          </thead>
+          <tbody id="print-forecast-tbody">
+            <!-- Dynamic forecast injected here -->
+          </tbody>
+        </table>
+        <p class="print-note">Note: Net savings represents additional income generated/wastage prevented minus sourcing premiums. Our 100% pure organic dairy supplies decrease shrinkage during cooking, yielding higher portions.</p>
+      </div>
+    </div>
+    <div class="print-report-footer">
+      <p>© 2026 Guru Kripa Dairy Commercial Division. Verified analytical data.</p>
+      <div class="print-actions">
+        <button class="btn btn-primary" onclick="window.print()">Print This Report</button>
+        <button class="btn-outline" onclick="document.getElementById('print-report-container').style.display='none'">Exit Preview</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Script -->
+  <script src="app.js"></script>
+</body>
+</html>
