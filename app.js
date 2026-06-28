@@ -1695,8 +1695,35 @@ function initContactPage() {
       // Web3Forms Access Key (Sends submission details directly to your Gmail!)
       const WEB3FORMS_ACCESS_KEY = '652914f4-1329-4bd5-8b16-2e71d6c5320c'; 
 
+      // Google Sheet Apps Script URL (Paste your Apps Script Web Webhook URL here!)
+      const GOOGLE_SHEET_URL = ''; 
+
+      // Google Sheet Sharing View Link (Paste the link to view your spreadsheet!)
+      const GOOGLE_SHEET_VIEW_LINK = ''; 
+
+      // 1. Submit to Google Sheet Database (if URL is set)
+      if (GOOGLE_SHEET_URL) {
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('email', email);
+        formData.append('subject', subject);
+        formData.append('message', message);
+
+        fetch(GOOGLE_SHEET_URL, {
+          method: 'POST',
+          body: formData
+        }).catch(err => console.error('Google Sheet database backup failed:', err));
+      }
+
+      // 2. Submit to Web3Forms Email Alert
       if (WEB3FORMS_ACCESS_KEY) {
         try {
+          // Append the Google Sheet link in the email message body
+          let emailBody = message;
+          if (GOOGLE_SHEET_VIEW_LINK) {
+            emailBody += `\n\n-----------------------------------\n📊 VIEW ALL RESPONSES (DATABASE EXCEL):\n${GOOGLE_SHEET_VIEW_LINK}`;
+          }
+
           const response = await fetch('https://api.web3forms.com/submit', {
             method: 'POST',
             headers: {
@@ -1708,7 +1735,7 @@ function initContactPage() {
               name: name,
               email: email,
               subject: `[Guru Kripa Inquiry] - ${subject}`,
-              message: message,
+              message: emailBody,
               from_name: 'Guru Kripa Dairy Website'
             })
           });
