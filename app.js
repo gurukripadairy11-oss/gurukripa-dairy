@@ -1700,7 +1700,7 @@ function initContactPage() {
       const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxflkxetImBtgFU2Qt8OB_fy1Zr0I9AQj5RWCs0eQlXghgv8qkuqM2epqkF90cWKa5_VQ/exec'; 
 
       // Google Sheet Sharing View Link (Paste the link to view your spreadsheet!)
-      const GOOGLE_SHEET_VIEW_LINK = 'https://docs.google.com/spreadsheets/d/1Ygt0cBkBU3jS-7F_WyXzL53FOH9SuxpECtQJxUX0gMI/edit?usp=sharing'; 
+      const GOOGLE_SHEET_VIEW_LINK = 'https://docs.google.com/spreadsheets/d/1lmEIOyJWWatkH5Kc8vSD2ubYkeO3oOrURrAMjHNFuuo/edit?usp=sharing'; 
 
       // 1. Submit to Google Sheet Database (if URL is set)
       if (GOOGLE_SHEET_URL) {
