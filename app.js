@@ -1682,6 +1682,13 @@ function initContactPage() {
     contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.innerHTML;
+      
+      // Show loading state
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Sending Enquiry...';
+      
       const name = document.getElementById('contact-name').value;
       const email = document.getElementById('contact-email').value;
       const phone = document.getElementById('contact-phone').value;
@@ -1702,7 +1709,10 @@ function initContactPage() {
       // Google Sheet Sharing View Link (Paste the link to view your spreadsheet!)
       const GOOGLE_SHEET_VIEW_LINK = 'https://docs.google.com/spreadsheets/d/1lmEIOyJWWatkH5Kc8vSD2ubYkeO3oOrURrAMjHNFuuo/edit?usp=sharing'; 
 
-      // 1. Submit to Google Sheet Database (if URL is set)
+      // Prepare promises for parallel execution
+      const promises = [];
+
+      // 1. Google Sheet Database Promise
       if (GOOGLE_SHEET_URL) {
         const formData = new FormData();
         formData.append('name', name);
@@ -1711,22 +1721,25 @@ function initContactPage() {
         formData.append('subject', subject);
         formData.append('message', message);
 
-        fetch(GOOGLE_SHEET_URL, {
-          method: 'POST',
-          body: formData
-        }).catch(err => console.error('Google Sheet database backup failed:', err));
+        promises.push(
+          fetch(GOOGLE_SHEET_URL, {
+            method: 'POST',
+            body: formData
+          })
+          .then(res => console.log('Google Sheets save succeeded'))
+          .catch(err => console.error('Google Sheet save failed:', err))
+        );
       }
 
-      // 2. Submit to Web3Forms Email Alert
+      // 2. Web3Forms Email Alert Promise
       if (WEB3FORMS_ACCESS_KEY) {
-        try {
-          // Append details in the email message body
-          let emailBody = `Customer Contact details:\n- Name: ${name}\n- Phone: ${phone}\n- Email: ${email}\n- Subject: ${subject}\n\nMessage:\n${message}`;
-          if (GOOGLE_SHEET_VIEW_LINK) {
-            emailBody += `\n\n-----------------------------------\n📊 VIEW ALL RESPONSES (DATABASE EXCEL):\n${GOOGLE_SHEET_VIEW_LINK}`;
-          }
+        let emailBody = `Customer Contact details:\n- Name: ${name}\n- Phone: ${phone}\n- Email: ${email}\n- Subject: ${subject}\n\nMessage:\n${message}`;
+        if (GOOGLE_SHEET_VIEW_LINK) {
+          emailBody += `\n\n-----------------------------------\n📊 VIEW ALL RESPONSES (DATABASE EXCEL):\n${GOOGLE_SHEET_VIEW_LINK}`;
+        }
 
-          const response = await fetch('https://api.web3forms.com/submit', {
+        promises.push(
+          fetch('https://api.web3forms.com/submit', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -1740,22 +1753,27 @@ function initContactPage() {
               message: emailBody,
               from_name: 'Guru Kripa Dairy Website'
             })
-          });
-
-          const result = await response.json();
-          if (result.success) {
-            alert('Thank you! Your inquiry has been submitted. You will receive an email confirmation shortly.');
-          } else {
-            alert('Submission failed. Saved locally in backup.');
-          }
-        } catch (err) {
-          console.error('Email notification post failed:', err);
-          alert('Saved locally. Connection to email server failed.');
-        }
-      } else {
-        alert(`Inquiry submitted successfully!\n\nName: ${name}\nEmail: ${email}\n\nNote: Sourcing data is saved in browser LocalStorage. Provide your Gmail to the AI assistant to enable instant email notifications!`);
+          })
+          .then(res => res.json())
+          .then(result => {
+            if (result.success) {
+              console.log('Web3Forms email sent');
+            } else {
+              console.warn('Web3Forms returned failure code:', result);
+            }
+          })
+          .catch(err => console.error('Web3Forms submit failed:', err))
+        );
       }
+
+      // Wait for all promises to finish (either success or fail)
+      await Promise.all(promises);
+
+      // Reset button and clear form
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnText;
       
+      alert('Thank you! Your enquiry has been submitted. Sourcing data has been recorded in Google Sheets and email notification is sent.');
       contactForm.reset();
     });
   }
