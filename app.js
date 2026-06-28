@@ -1684,12 +1684,13 @@ function initContactPage() {
       
       const name = document.getElementById('contact-name').value;
       const email = document.getElementById('contact-email').value;
+      const phone = document.getElementById('contact-phone').value;
       const subject = document.getElementById('contact-subject').value;
       const message = document.getElementById('contact-message').value;
       
       // Save locally to localStorage as backup
       const enquiries = JSON.parse(localStorage.getItem('contact_enquiries') || '[]');
-      enquiries.push({ name, email, subject, message, date: new Date().toLocaleString() });
+      enquiries.push({ name, email, phone, subject, message, date: new Date().toLocaleString() });
       localStorage.setItem('contact_enquiries', JSON.stringify(enquiries));
 
       // Web3Forms Access Key (Sends submission details directly to your Gmail!)
@@ -1705,6 +1706,7 @@ function initContactPage() {
       if (GOOGLE_SHEET_URL) {
         const formData = new FormData();
         formData.append('name', name);
+        formData.append('phone', phone);
         formData.append('email', email);
         formData.append('subject', subject);
         formData.append('message', message);
@@ -1718,8 +1720,8 @@ function initContactPage() {
       // 2. Submit to Web3Forms Email Alert
       if (WEB3FORMS_ACCESS_KEY) {
         try {
-          // Append the Google Sheet link in the email message body
-          let emailBody = message;
+          // Append details in the email message body
+          let emailBody = `Customer Contact details:\n- Name: ${name}\n- Phone: ${phone}\n- Email: ${email}\n- Subject: ${subject}\n\nMessage:\n${message}`;
           if (GOOGLE_SHEET_VIEW_LINK) {
             emailBody += `\n\n-----------------------------------\n📊 VIEW ALL RESPONSES (DATABASE EXCEL):\n${GOOGLE_SHEET_VIEW_LINK}`;
           }
