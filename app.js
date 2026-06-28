@@ -1696,10 +1696,10 @@ function initContactPage() {
       const WEB3FORMS_ACCESS_KEY = '652914f4-1329-4bd5-8b16-2e71d6c5320c'; 
 
       // Google Sheet Apps Script URL (Paste your Apps Script Web Webhook URL here!)
-      const GOOGLE_SHEET_URL = ''; 
+      const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxFwwXpnjqY5_bKGvcCS9pqbUzCzjevVjJVEijAp2VQwmWet6eXst_ptphOYCpQkitz3g/exec'; 
 
       // Google Sheet Sharing View Link (Paste the link to view your spreadsheet!)
-      const GOOGLE_SHEET_VIEW_LINK = ''; 
+      const GOOGLE_SHEET_VIEW_LINK = 'https://docs.google.com/spreadsheets/d/1Ygt0cBkBU3jS-7F_WyXzL53FOH9SuxpECtQJxUX0gMI/edit?usp=sharing'; 
 
       // 1. Submit to Google Sheet Database (if URL is set)
       if (GOOGLE_SHEET_URL) {
