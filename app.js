@@ -1679,9 +1679,44 @@ function initContactPage() {
 
   const contactForm = document.getElementById('contact-enquiry-form');
   if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      alert('Your inquiry has been submitted successfully! We will contact you back in 24 business hours.');
+      
+      const name = document.getElementById('contact-name').value;
+      const email = document.getElementById('contact-email').value;
+      const subject = document.getElementById('contact-subject').value;
+      const message = document.getElementById('contact-message').value;
+      
+      // Save locally to localStorage as a fallback/mock database
+      const enquiries = JSON.parse(localStorage.getItem('contact_enquiries') || '[]');
+      enquiries.push({ name, email, subject, message, date: new Date().toLocaleString() });
+      localStorage.setItem('contact_enquiries', JSON.stringify(enquiries));
+
+      // Google Sheet Apps Script Webhook URL (User can paste their URL here)
+      const GOOGLE_SHEET_URL = ''; 
+
+      if (GOOGLE_SHEET_URL) {
+        try {
+          // Sending as URL parameters or JSON
+          const formData = new FormData();
+          formData.append('name', name);
+          formData.append('email', email);
+          formData.append('subject', subject);
+          formData.append('message', message);
+
+          await fetch(GOOGLE_SHEET_URL, {
+            method: 'POST',
+            body: formData
+          });
+          alert('Thank you! Your inquiry has been submitted and saved directly to your Google Sheet.');
+        } catch (err) {
+          console.error('Google Sheet submit failed:', err);
+          alert('Saved locally. Connection to Google Sheets failed.');
+        }
+      } else {
+        alert(`Inquiry submitted successfully!\n\nName: ${name}\nEmail: ${email}\n\nNote: Sourcing data is saved in browser LocalStorage. Set a Google Sheet URL in app.js to save it to an online spreadsheet!`);
+      }
+      
       contactForm.reset();
     });
   }
