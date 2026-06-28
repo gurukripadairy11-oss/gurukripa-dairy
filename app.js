@@ -1687,34 +1687,44 @@ function initContactPage() {
       const subject = document.getElementById('contact-subject').value;
       const message = document.getElementById('contact-message').value;
       
-      // Save locally to localStorage as a fallback/mock database
+      // Save locally to localStorage as backup
       const enquiries = JSON.parse(localStorage.getItem('contact_enquiries') || '[]');
       enquiries.push({ name, email, subject, message, date: new Date().toLocaleString() });
       localStorage.setItem('contact_enquiries', JSON.stringify(enquiries));
 
-      // Google Sheet Apps Script Webhook URL (User can paste their URL here)
-      const GOOGLE_SHEET_URL = ''; 
+      // Web3Forms Access Key (Sends submission details directly to your Gmail!)
+      const WEB3FORMS_ACCESS_KEY = ''; 
 
-      if (GOOGLE_SHEET_URL) {
+      if (WEB3FORMS_ACCESS_KEY) {
         try {
-          // Sending as URL parameters or JSON
-          const formData = new FormData();
-          formData.append('name', name);
-          formData.append('email', email);
-          formData.append('subject', subject);
-          formData.append('message', message);
-
-          await fetch(GOOGLE_SHEET_URL, {
+          const response = await fetch('https://api.web3forms.com/submit', {
             method: 'POST',
-            body: formData
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              access_key: WEB3FORMS_ACCESS_KEY,
+              name: name,
+              email: email,
+              subject: `[Guru Kripa Inquiry] - ${subject}`,
+              message: message,
+              from_name: 'Guru Kripa Dairy Website'
+            })
           });
-          alert('Thank you! Your inquiry has been submitted and saved directly to your Google Sheet.');
+
+          const result = await response.json();
+          if (result.success) {
+            alert('Thank you! Your inquiry has been submitted. You will receive an email confirmation shortly.');
+          } else {
+            alert('Submission failed. Saved locally in backup.');
+          }
         } catch (err) {
-          console.error('Google Sheet submit failed:', err);
-          alert('Saved locally. Connection to Google Sheets failed.');
+          console.error('Email notification post failed:', err);
+          alert('Saved locally. Connection to email server failed.');
         }
       } else {
-        alert(`Inquiry submitted successfully!\n\nName: ${name}\nEmail: ${email}\n\nNote: Sourcing data is saved in browser LocalStorage. Set a Google Sheet URL in app.js to save it to an online spreadsheet!`);
+        alert(`Inquiry submitted successfully!\n\nName: ${name}\nEmail: ${email}\n\nNote: Sourcing data is saved in browser LocalStorage. Provide your Gmail to the AI assistant to enable instant email notifications!`);
       }
       
       contactForm.reset();
