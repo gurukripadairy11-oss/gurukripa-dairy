@@ -1693,7 +1693,7 @@ function initContactPage() {
       localStorage.setItem('contact_enquiries', JSON.stringify(enquiries));
 
       // Web3Forms Access Key (Sends submission details directly to your Gmail!)
-      const WEB3FORMS_ACCESS_KEY = ''; 
+      const WEB3FORMS_ACCESS_KEY = '652914f4-1329-4bd5-8b16-2e71d6c5320c'; 
 
       if (WEB3FORMS_ACCESS_KEY) {
         try {
